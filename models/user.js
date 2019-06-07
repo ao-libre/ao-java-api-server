@@ -13,17 +13,20 @@
 // })
 
 // db.users.find() = Select * from users
-
+const sha256 = require('js-sha256');
+const crypto = require('crypto');
 
 exports.registerNewUser = function(req, res) {
-  let nickname = req.body.nickname
-  let password = req.body.password
-  let email = req.body.email
-  let salt = req.body.salt
+  const nickname = req.body.nickname
+  const passwordPlain = req.body.password
+  const email = req.body.email
+  const salt = crypto.randomBytes(16).toString('base64');
+
+  const passwordEncripted = sha256(passwordPlain + salt)
 
   mongodb.users.save({
     nickname,
-    password,
+    password: passwordEncripted,
     email,
     salt,
   }, function (error, value) {
