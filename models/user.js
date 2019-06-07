@@ -36,3 +36,25 @@ exports.registerNewUser = function(req, res) {
     return res.status(200).json(value)
   });
 };
+
+exports.loginUser = function(req, res) {
+  const email = req.body.email
+  const passwordPlain = req.body.password
+  
+
+  mongodb.users.findOne({
+    email: email,
+  }, function (error, user) {
+    if (error) return res.status(500).json(error);
+
+    const passwordEncripted = sha256(passwordPlain + user.salt);
+
+    if (user.password === passwordEncripted) {
+      console.info("Se logeo con exito usuario: " + email)
+      return res.status(200).json(user)
+    } else {
+      console.info("Las credenciales no son validas: " + email)
+      return res.status(200).send("Las credenciales no son validas")
+    }
+  })
+  
