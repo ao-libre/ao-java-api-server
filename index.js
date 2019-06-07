@@ -9,20 +9,12 @@ app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 // app.use(cors())
 
-// app.use('/api/v1/charfiles', require('./controllers/charfiles'));
-// app.use('/api/v1/accounts', require('./controllers/accounts'));
-// app.use('/api/v1/emails', require('./controllers/emails'));
-// app.use('/api/v1/logs', require('./controllers/logs'));
-
-// simple usage for a local db
-
 app.use('/api/v1/users', require('./controllers/users'));
 
-global.mongodb = mongojs('mydb', ['users']);
-console.log(mongodb)
+global.mongodb = mongojs(`mongodb://${process.env.DB_MONGODB_USER}:${process.env.DB_MONGODB_PASSWORD}@${process.env.DB_MONGODB_HOST}/${process.env.DB_MONGODB_NAME}`);
 
 app.listen(port, function () {
     var datetime = new Date();
     var message = "Argentum Online JAVA API on Port:- " + port + " Started at :- " + datetime;
-    console.log('\x1b[32m%s\x1b[2m', message);
+    console.log('\x1b[32m%s\x1b[0m', message);
 });

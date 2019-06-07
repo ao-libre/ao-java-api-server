@@ -1,3 +1,4 @@
+//Comandos utiles para usar en Mongo DB
 // db.adminCommand( { listDatabases: 1 } )
 
 // db.users.insertOne({ 
@@ -11,6 +12,8 @@
 //   nickname: "canvas", 
 // })
 
+// db.users.find() = Select * from users
+
 
 exports.registerNewUser = function(req, res) {
   let nickname = req.body.nickname
@@ -18,14 +21,15 @@ exports.registerNewUser = function(req, res) {
   let email = req.body.email
   let salt = req.body.salt
 
-console.log(mongodb)
   mongodb.users.save({
     nickname,
     password,
     email,
     salt,
-  });
+  }, function (error, value) {
+    if (error) return res.status(500).json(error);
 
-  console.info("Se registro un nuevo usuario: " + email)
-  return res.status(200).send('Se registro un nuevo usuario: ' + email)
+    console.info("Se registro un nuevo usuario: " + email)
+    return res.status(200).json(value)
+  });
 };

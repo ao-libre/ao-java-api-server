@@ -13,8 +13,9 @@ db.createCollection("users", {
                description: "must be a string and is required"
             },
             email: {
+               pattern: "^[^@\s]+@[^@\s]+\.[^@\.\s]+$",
                bsonType: "string",
-               description: "must be a string and is required"
+               description: "must be a valid email and is required"
             },
             salt: {
                bsonType: "string",
@@ -25,10 +26,5 @@ db.createCollection("users", {
    }
 })
 
-db.createCollection( "contacts",
-   { validator: { $or:
-      [
-         { email: { $regex: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/} },
-      ]
-   }
-} )
+db.users.createIndex( { email: 1 }, { unique: true } )
+db.users.createIndex( { nickname: 1 }, { unique: true } )
