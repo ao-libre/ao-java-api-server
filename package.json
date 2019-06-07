@@ -1,0 +1,27 @@
+{
+  "name": "ao-java-api-server",
+  "version": "1.0.0",
+  "description": "API to use with the server of the game (http://www.argentumonline.org)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "keywords": [
+    "ao-java",
+    "argentum",
+    "online",
+    "mmorpg",
+    "ao"
+  ],
+  "author": "Lucas Recoaro",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.0.0",
+    "express": "^4.17.1",
+    "mongojs": "^2.6.0",
+    "nodemailer": "^6.2.1"
+  }
+}
