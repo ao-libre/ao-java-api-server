@@ -54,7 +54,7 @@ exports.loginUser = function(req, res) {
       return res.status(200).json(user)
     } else {
       console.info("Las credenciales no son validas: " + email)
-      return res.status(200).send("Las credenciales no son validas")
+      return res.status(401).send("Las credenciales no son validas")
     }
   })
-  
+}
