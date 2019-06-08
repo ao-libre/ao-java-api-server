@@ -28,3 +28,14 @@ db.createCollection("users", {
 
 db.users.createIndex( { email: 1 }, { unique: true } )
 db.users.createIndex( { nickname: 1 }, { unique: true } )
+
+
+var userSchema = {
+   "type": "object",
+   "properties": {
+     "nickname": { "type": "string" },
+     "email": { "type": "string" },
+     "salt": { "type": "string" },
+     "password": { "type": "string" },
+   }
+}
