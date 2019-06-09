@@ -40,7 +40,6 @@ exports.registerNewUser = function(req, res) {
 exports.loginUser = function(req, res) {
   const email = req.body.email
   const passwordPlain = req.body.password
-  
 
   mongodb.users.findOne({
     email: email,
