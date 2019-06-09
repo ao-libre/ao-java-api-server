@@ -22,7 +22,7 @@ db.createCollection("users", {
                description: "must be a string and is required"
             },
             characters: {
-               bsonType: "object",
+               bsonType: "array",
                required: [
                   "name",
                   "head",

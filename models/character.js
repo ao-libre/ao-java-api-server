@@ -1,5 +1,4 @@
 function createCharacterJson(req) {
-	const email = req.body.email
 	const name = req.body.name
 	const description = req.body.description
 	const head = req.body.head
@@ -28,36 +27,52 @@ function createCharacterJson(req) {
 		intelligence,
 		strength,
 		gold,
-		level,
-		items: [
-			{
-				id: 1,
-				quantity: 50,
-			},
-			{
-				id: 2,
-				quantity: 50,
-			},
-		],
-
-		deaths: {
-			npcs: 0,
-			characters: 0
-		}
+		level
 	}
 }
 
+// items: [
+// 	{
+// 		id: 1,
+// 		quantity: 50
+// 	},
+// 	{
+// 		id: 2,
+// 		quantity: 50
+// 	},
+// ]
+// deaths: {
+// 	npcs: 0,
+// 	characters: 0
+// }
 exports.createNewCharacter = function (req, res) {
-	const newCharacter = createCharacterJson(req);
+	// const newCharacter = createCharacterJson(req);
+
+	let newCharacter = {
+		name: 'recox',
+		description: 'un pj poderoso',
+		head: 1,
+		class: 'Warrior',
+		race: 'Elf',
+		genre: 'Male',
+		agility: 10,
+		charisma: 11,
+		constitution: 12,
+		intelligence: 13,
+		strength: 14,
+		gold: 200,
+		level: 1
+	}
 
 	mongodb.users.findAndModify({
 		query: { email: req.body.email },
-		update: { $set: { characters: newCharacter } },
+		update: { $push: { characters: newCharacter } },
 	}, function (error, user, lastErrorObject) {
 		if (error) return res.status(500).json(error);
+		console.log(user)
 
 		console.info("Se creo un nuevo personaje con el nombre: " + req.body.name)
-		return res.status(200).json(value)
+		return res.status(200).json(user)
 	})
 
 }
