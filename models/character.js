@@ -38,23 +38,33 @@ function createCharacterJson(req) {
 exports.createNewCharacter = function (req, res) {
 	const newCharacter = createCharacterJson(req)
 
-	mongodb.users.findAndModify({
-		query: { 
-			email: req.body.email, 
-		},
-		update: { 
-			$push: { characters: newCharacter } 
-		},
-		new: true
-	}, function (error, user, lastErrorObject) {
-		if (error && error.code === 11000) return res.status(409).send("Ya existe un personaje con ese nombre")
-		if (error) return res.status(500).json(error)
+	//As in MongoDB we can't or i don't know how to perform this in one action
+	//First we do a query to get the user account and then I check if there is an user with that name in the account
+	//Then we perform a second query to save the character in case it doesn't exist
+	//Because if I don't do this verification I can repeate the character.name inside the user
+	//Even if "characters.name" is an index.
 
-		if (!user) {
-			return res.status(500).send("No existe el usuario con el email: " + req.body.email)
+	mongodb.users.findOne({
+		email: req.body.email
+	}, function (error, user) {
+		if (error) return res.status(500).json(error)
+		if (!user) return res.status(409).send("No existe un usuario con el email: " + req.body.email)
+
+		//Verify if the character.name is already in the user account
+		if (user && user.characters) {
+			const isCharacterInUser = user.characters.find(el => el.name === req.body.name);
+			if (isCharacterInUser) return res.status(409).send("Ya existe un personaje con ese nombre en esta cuenta " + req.body.name)
 		}
 
-		console.info("Se creo un nuevo personaje con el nombre: " + req.body.name)
-		return res.status(200).json(user)
+		//If the account does not have any character, initalize the array
+		user.characters = user.characters ? user.characters : [];
+
+		user.characters.push(newCharacter)
+		mongodb.users.save(user, function(error, doc) {
+			if (error && error.code === 11000) return res.status(409).send("Ya existe un personaje con ese nombre")
+			if (error) return res.status(500).json(error)
+
+			return res.status(200).json(doc)
+		})
 	})
 }
