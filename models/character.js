@@ -1,63 +1,45 @@
 function createCharacterJson(req) {
-	const email = req.body.email
-	const name = req.body.name
-	const description = req.body.description
-	const head = req.body.head
-	const classChar = req.body.class
-	const race = req.body.race
-	const genre = req.body.genre
-	const agility = req.body.agility
-	const charisma = req.body.charisma
-	const constitution = req.body.constitution
-	const intelligence = req.body.intelligence
-	const strength = req.body.strength
-	const gold = req.body.gold
-	const level = req.body.level
+	const itemsWithIntegerValues = req.body.items.map(el => {
+		return {
+			id: parseInt(el.id),
+			quantity: parseInt(el.quantity)
+		}
 
+	})
 
 	return {
-		name,
-		description,
-		head,
-		class: classChar,
-		race,
-		genre,
-		agility,
-		charisma,
-		constitution,
-		intelligence,
-		strength,
-		gold,
-		level,
-		items: [
-			{
-				id: 1,
-				quantity: 50,
-			},
-			{
-				id: 2,
-				quantity: 50,
-			},
-		],
-
-		deaths: {
-			npcs: 0,
-			characters: 0
-		}
+		name: req.body.name,
+		description: req.body.description,
+		head: parseInt(req.body.head),
+		class: req.body.class,
+		race: req.body.race,
+		genre: req.body.genre,
+		agility: parseInt(req.body.agility),
+		charisma: parseInt(req.body.charisma),
+		constitution: parseInt(req.body.constitution),
+		intelligence: parseInt(req.body.intelligence),
+		strength: parseInt(req.body.strength),
+		gold: parseInt(req.body.gold),
+		level: parseInt(req.body.level),
+		items: itemsWithIntegerValues
 	}
 }
 
 exports.createNewCharacter = function (req, res) {
-	const newCharacter = createCharacterJson(req);
+	const newCharacter = createCharacterJson(req)
 
 	mongodb.users.findAndModify({
 		query: { email: req.body.email },
-		update: { $set: { characters: newCharacter } },
+		update: { $push: { characters: newCharacter } },
 	}, function (error, user, lastErrorObject) {
 		if (error) return res.status(500).json(error);
 
+		if (!user) {
+			res.status(500).send("No existe el usuario con el email: " + req.body.email);
+		}
+
 		console.info("Se creo un nuevo personaje con el nombre: " + req.body.name)
-		return res.status(200).json(value)
+		return res.status(200).json(newCharacter)
 	})
 
 }

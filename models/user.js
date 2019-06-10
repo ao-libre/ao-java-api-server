@@ -9,7 +9,7 @@
 // })
 
 // db.users.find({ 
-//   nickname: "canvas", 
+//   nickname: "juancito232", 
 // })
 
 // db.users.find() = Select * from users
