@@ -4,7 +4,20 @@ function createCharacterJson(req) {
 			id: parseInt(el.id),
 			quantity: parseInt(el.quantity)
 		}
+	})
 
+	const spellsWithIntegerValues = req.body.spells.map(el => {
+		return {
+			id: parseInt(el.id),
+			position: parseInt(el.position)
+		}
+	})
+
+	const statsWithIntegerValues = req.body.stats.map(el => {
+		return {
+			name: el.name,
+			quantity: parseInt(el.quantity)
+		}
 	})
 
 	return {
@@ -14,14 +27,11 @@ function createCharacterJson(req) {
 		class: req.body.class,
 		race: req.body.race,
 		genre: req.body.genre,
-		agility: parseInt(req.body.agility),
-		charisma: parseInt(req.body.charisma),
-		constitution: parseInt(req.body.constitution),
-		intelligence: parseInt(req.body.intelligence),
-		strength: parseInt(req.body.strength),
 		gold: parseInt(req.body.gold),
 		level: parseInt(req.body.level),
-		items: itemsWithIntegerValues
+		items: itemsWithIntegerValues,
+		spells: spellsWithIntegerValues,
+		stats: statsWithIntegerValues,
 	}
 }
 
@@ -29,17 +39,21 @@ exports.createNewCharacter = function (req, res) {
 	const newCharacter = createCharacterJson(req)
 
 	mongodb.users.findAndModify({
-		query: { email: req.body.email },
-		update: { $push: { characters: newCharacter } },
+		query: { 
+			email: req.body.email, 
+		},
+		update: { 
+			$push: { characters: newCharacter } 
+		},
+		new: true
 	}, function (error, user, lastErrorObject) {
-		if (error) return res.status(500).json(error);
+		if (error) return res.status(500).json(error)
 
 		if (!user) {
-			res.status(500).send("No existe el usuario con el email: " + req.body.email);
+			return res.status(500).send("No existe el usuario con el email: " + req.body.email)
 		}
 
 		console.info("Se creo un nuevo personaje con el nombre: " + req.body.name)
-		return res.status(200).json(newCharacter)
+		return res.status(200).json(user)
 	})
-
 }

@@ -29,11 +29,6 @@ db.createCollection("users", {
                   "class",
                   "race",
                   "genre",
-                  "agility",
-                  "charisma",
-                  "constitution",
-                  "inteligence",
-                  "strength",
                   "level"
                ],
                properties: {
@@ -60,26 +55,6 @@ db.createCollection("users", {
                   genre: {
                      bsonType: "string",
                      description: "must be a string and is required"
-                  },
-                  agility: {
-                     bsonType: "int",
-                     description: "must be a integer and is required"
-                  },
-                  charisma: {
-                     bsonType: "int",
-                     description: "must be a integer and is required"
-                  },
-                  constitution: {
-                     bsonType: "int",
-                     description: "must be a integer and is required"
-                  },
-                  intelligence: {
-                     bsonType: "int",
-                     description: "must be a integer and is required"
-                  },
-                  strength: {
-                     bsonType: "int",
-                     description: "must be a integer and is required"
                   },
                   "time-online": {
                      bsonType: "int",
@@ -110,17 +85,51 @@ db.createCollection("users", {
                      description: "must be a string and is required"
                   },
 
+                  stats: {
+                     bsonType: "array",
+                     required: ["name", "quantity"],
+                     properties: {
+                        name: {
+                           bsonType: "string",
+                           description: "must be a string and is required"
+                        },
+                        quantity: {
+                           bsonType: "int",
+                           description: "must be a integer and is required"
+                        }
+                     }
+                  },
+
+                  spells: {
+                     bsonType: "array",
+                     required: ["id", "position"],
+                     properties: {
+                        id: {
+                           bsonType: "int",
+                           description: "must be a integer and is required"
+                        },
+                        position: {
+                           bsonType: "int",
+                           description: "must be a integer and is required"
+                        }
+                     }
+                  },
+
                   items: {
                      bsonType: "array",
                      required: ["id", "quantity"],
                      properties: {
-                        "id": {
+                        id: {
                            bsonType: "int",
                            description: "must be a integer and is required"
                         },
-                        "quantity": {
+                        quantity: {
                            bsonType: "int",
                            description: "must be a integer and is required"
+                        },
+                        equipped: {
+                           type: "boolean",
+                           description: "must be a boolean"
                         }
                      }
                   },
@@ -169,65 +178,3 @@ db.createCollection("users", {
 db.users.createIndex({ email: 1 }, { unique: true })
 db.users.createIndex({ nickname: 1 }, { unique: true })
 db.users.createIndex({ "characters.name": 1 }, { unique: true })
-
-
-var userSchema = {
-   "type": "object",
-   "properties": {
-      "nickname": { "type": "string" },
-      "email": { "type": "string" },
-      "salt": { "type": "string" },
-      "password": { "type": "string" },
-      "characters": {
-         "type": "array",
-         "properties": {
-            "name": { "type": "string" },
-            "description": { "type": "string" },
-            "head": { "type": "integer" },
-            "class": { "type": "string" },
-            "race": { "type": "string" },
-            "genre": { "type": "string" },
-            "agility": { "type": "integer" },
-            "charisma": { "type": "integer" },
-            "constitution": { "type": "integer" },
-            "intelligence": { "type": "integer" },
-            "strength": { "type": "integer" },
-            "time-online": { "type": "integer" },
-            "gold": { "type": "integer" },
-            "level": { "type": "integer" },
-            "experience-obtained": { "type": "integer" },
-            "experience-for-next-level": { "type": "integer" },
-            "online": { "type": "boolean" },
-            "home-town": { "type": "string" },
-
-            "position": {
-               "type": "object",
-               "required": ["position-x", "position-y", "map"],
-               "properties": {
-                  "position-x": { "type": "integer" },
-                  "position-y": { "type": "integer" },
-                  "map": { "type": "integer" }
-               }
-            },
-
-            "items": {
-               "type": "array",
-               "required": ["id", "quantity"],
-               "properties": {
-                  "id": { "type": "integer" },
-                  "quantity": { "type": "integer" }
-               }
-            },
-
-            "deaths": {
-               "type": "object",
-               "required": ["npcs", "characters"],
-               "properties": {
-                  "npcs": { "type": "integer" },
-                  "characters": { "type": "integer" }
-               }
-            }
-         }
-      }
-   }
-}
