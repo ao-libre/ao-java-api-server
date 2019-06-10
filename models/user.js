@@ -16,7 +16,7 @@
 const sha256 = require('js-sha256');
 const crypto = require('crypto');
 
-exports.registerNewUser = function(req, res) {
+exports.createNewUser = function(req, res) {
   const nickname = req.body.nickname
   const passwordPlain = req.body.password
   const email = req.body.email
@@ -30,7 +30,7 @@ exports.registerNewUser = function(req, res) {
     email,
     salt,
   }, function (error, value) {
-    if (error.code === 11000) return res.status(409).send("Ya existe un usuario con el nickname o email utilizado")
+    if (error && error.code === 11000) return res.status(409).send("Ya existe un usuario con el nickname o email utilizado")
     if (error) return res.status(500).json(error);
 
     console.info("Se registro un nuevo usuario: " + email)

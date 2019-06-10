@@ -177,4 +177,4 @@ db.createCollection("users", {
 
 db.users.createIndex({ email: 1 }, { unique: true })
 db.users.createIndex({ nickname: 1 }, { unique: true })
-db.users.createIndex({ "characters.name": 1 }, { unique: true })
+db.users.createIndex({ "characters.name": 1 }, { unique: true, partialFilterExpression: { "characters.name": { $type: "string" } } })
