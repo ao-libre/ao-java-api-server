@@ -47,6 +47,7 @@ exports.createNewCharacter = function (req, res) {
 		},
 		new: true
 	}, function (error, user, lastErrorObject) {
+		if (error && error.code === 11000) return res.status(409).send("Ya existe un personaje con ese nombre")
 		if (error) return res.status(500).json(error)
 
 		if (!user) {
