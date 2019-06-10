@@ -4,4 +4,4 @@ API to use with the server ao-java
 
 # Postman Collection:
 
-https://www.getpostman.com/collections/4a49d7182dc50e529ccd
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/42351c05a67e003479d1)
