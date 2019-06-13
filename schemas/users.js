@@ -29,7 +29,8 @@ db.createCollection("users", {
                   "class",
                   "race",
                   "genre",
-                  "level"
+                  "level",
+                  "date-created"
                ],
                properties: {
                   name: {
