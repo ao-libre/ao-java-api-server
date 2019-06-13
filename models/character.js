@@ -1,26 +1,5 @@
 function createCharacterJson(req) {
-	const itemsWithIntegerValues = req.body.items.map(el => {
-		return {
-			id: parseInt(el.id),
-			quantity: parseInt(el.quantity)
-		}
-	})
-
-	const spellsWithIntegerValues = req.body.spells.map(el => {
-		return {
-			id: parseInt(el.id),
-			position: parseInt(el.position)
-		}
-	})
-
-	const statsWithIntegerValues = req.body.stats.map(el => {
-		return {
-			name: el.name,
-			quantity: parseInt(el.quantity)
-		}
-	})
-
-	return {
+	let characterJson = {
 		name: req.body.name,
 		description: req.body.description,
 		head: parseInt(req.body.head),
@@ -29,10 +8,43 @@ function createCharacterJson(req) {
 		genre: req.body.genre,
 		gold: parseInt(req.body.gold),
 		level: parseInt(req.body.level),
-		items: itemsWithIntegerValues,
-		spells: spellsWithIntegerValues,
-		stats: statsWithIntegerValues,
+		'date-created': new Date()
 	}
+
+	if (req.body.items) {
+		const itemsWithIntegerValues = req.body.items.map(el => {
+			return {
+				id: parseInt(el.id),
+				quantity: parseInt(el.quantity)
+			}
+		})
+
+		characterJson.items = itemsWithIntegerValues
+	}
+
+	if (req.body.spells) {
+		const spellsWithIntegerValues = req.body.spells.map(el => {
+			return {
+				id: parseInt(el.id),
+				position: parseInt(el.position)
+			}
+		})
+
+		characterJson.spells = spellsWithIntegerValues
+	}
+
+	if (req.body.stats) {
+		const statsWithIntegerValues = req.body.stats.map(el => {
+			return {
+				name: el.name,
+				quantity: parseInt(el.quantity)
+			}
+		})
+
+		characterJson.stats = statsWithIntegerValues
+	}
+
+	return characterJson
 }
 
 exports.createNewCharacter = function (req, res) {
@@ -57,7 +69,7 @@ exports.createNewCharacter = function (req, res) {
 		}
 
 		//If the account does not have any character, initalize the array
-		user.characters = user.characters ? user.characters : [];
+		user.characters = user.characters || [];
 
 		user.characters.push(newCharacter)
 		mongodb.users.save(user, function(error, doc) {

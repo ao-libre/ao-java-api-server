@@ -84,6 +84,10 @@ db.createCollection("users", {
                      bsonType: "string",
                      description: "must be a string and is required"
                   },
+                  "date-created": {
+                     bsonType: "string",
+                     description: "must be a string and is required"
+                  },
 
                   stats: {
                      bsonType: "array",
