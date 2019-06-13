@@ -13,7 +13,7 @@ db.createCollection("users", {
                description: "must be a string and is required"
             },
             email: {
-               pattern: "^[^@\s]+@[^@\s]+\.[^@\.\s]+$",
+               pattern: "@.*?\.",
                bsonType: "string",
                description: "must be a valid email and is required"
             },
