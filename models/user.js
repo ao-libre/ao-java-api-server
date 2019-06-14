@@ -46,7 +46,8 @@ exports.loginUser = function(req, res) {
     email: email,
   }, function (error, user) {
     if (error) return res.status(500).json(error);
-
+    if (!user) return res.status(409).send("No existe una cuenta con ese email");
+    
     const passwordEncripted = sha256(passwordPlain + user.salt);
 
     if (user.password === passwordEncripted) {
